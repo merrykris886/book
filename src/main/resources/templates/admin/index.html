@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>首页</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+    <!-- bootstrap -->
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+    <link href="css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
+
+    <!-- libraries -->
+    <link href="css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
+    <link href="css/lib/font-awesome.css" type="text/css" rel="stylesheet" />
+
+    <!-- global styles -->
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link rel="stylesheet" type="text/css" href="css/elements.css" />
+    <link rel="stylesheet" type="text/css" href="css/icons.css" />
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="css/compiled/index.css" type="text/css" media="screen" />
+
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+<body>
+
+    <!-- navbar -->
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <button type="button" class="btn btn-navbar visible-phone" id="menu-toggler">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+            <a class="brand" href="index"><img th:src="@{/images/logo.png}" /></a>
+
+            <ul class="nav pull-right">                
+                <li class="settings hidden-phone">
+                    <a href="signin.html" role="button">
+                        <i class="icon-share-alt"></i>
+                    </a>
+                </li>
+            </ul>            
+        </div>
+    </div>
+    <!-- end navbar -->
+
+    <!-- sidebar -->
+    <div id="sidebar-nav">
+        <ul id="dashboard-menu">
+            <li class="active">
+                <div class="pointer">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
+                <a href="/laofuzi/admin/index">
+                    <i class="icon-home"></i>
+                    <span>书籍管理</span>
+                </a>
+            </li>            
+            
+            <li>
+                <a href="/laofuzi/admin/user-list">
+                    <i class="icon-group"></i>
+                    <span>用户管理</span>
+                </a>
+            </li>
+          
+            <li>
+                <a href="/laofuzi/admin/order">
+                    <i class="icon-cog"></i>
+                    <span>订单管理</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <!-- end sidebar -->
+
+
+	<!-- main container -->
+    <div class="content">
+
+        <!-- settings changer -->
+        
+
+        <div class="container-fluid">
+
+            <div id="pad-wrapper">
+                <!-- table sample -->
+                <!-- the script for the toggle all checkboxes from header is located in js/theme.js -->
+                <div class="table-products section">
+                    <div class="row-fluid head">
+                        <div class="span12">
+                            <h3>书籍列表</h3>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid filter-block">
+                        <div class="pull-right">
+							<!--
+                            <div class="ui-select">
+                                <select>
+                                  <option />最新
+                                  <option />过去30天
+                                  <option />最热
+                                </select>
+                            </div>
+							-->
+                            <input id="keyword" type="text" class="search" onkeypress="search(event)" />
+                            <a class="btn-flat new-product" href="upbook">+ 添加书籍</a>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <table class= "table table-hover" >
+                            <thead >
+                                <tr>
+                                    <th class="span3" style="width:15%;" >
+                                        <input type="checkbox" />
+                                        封面
+                                    </th>
+                                    <th class="span3" style="width:5%" >
+                                        <span class="line"></span>书名
+                                    </th>
+                                    <th class="span3" style="width:10%" >
+                                        <span class="line"></span>作者
+                                    </th>
+                                    <th class="span3"  style="width:20%" >
+                                        <span class="line"></span>简介
+                                    </th>
+                                    <th  class="span3" style="width:5%">
+                                        <span class="line"></span>价格
+                                    </th>
+                                    <th class="span3" style="width:5%" >
+                                        <span class="line"></span>数量
+                                    </th>
+                                    <th class="span3" style="width:5%" >
+                                        <span class="line"></span>操作
+                                    </th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody id="books">
+                                <!-- row -->
+                                <tr class="row1" th:each="book,iterStat : ${books}">
+                                    <td>
+                                        <input type="checkbox" />
+                                        <img th:src="${book.img}" width=100px; />
+                                    </td>
+                                    <td>
+                                       <input type="text" id="bookname1" th:value="${book.name}" style="width:140px;" readonly="true"/>
+									</td>
+                                    <td><input type="text" id="author1" th:value="${book.author}" style="width:140px;" readonly="true"/></td>
+                                    <td >
+										<textarea id="description1"  style="width:300px;height:150px;"  readonly="true" th:text="${book.describe}">
+										</textarea>
+									</td>
+
+                                    <td><input type="text" id="price1" style="width:70px" th:value="${book.unitprice}" readonly="true"/></td>
+                                    <td><input type="text" id="amount1" style="width:70px" th:value="${book.quantity}" readonly="true"/></td>
+									<td>
+										<ul class="actions">
+                                            <li><i id="edit1" class="table-edit" th:onclick="'updatebook('+${book.id}+')'"></i></li>
+                                            <!-- <li><i class="table-settings"></i></li>-->
+											<li class="last"><i id="delete1" class="table-delete" th:onclick="'deletebook('+${book.id}+')'"></i></li>
+                                        </ul>
+									</td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                      <ul>
+                        <li><a href="#">&#8249;</a></li>
+                        <li><a class="active" href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">&#8250;</a></li>
+                      </ul>
+                    </div>
+                </div>
+                <!-- end table sample -->
+                <!-- 修改书籍信息窗口-->
+                <div class="modal hide" id="bookwindow" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    ×
+                                </button>
+                                <h3 class="modal-title" id="bookLabel">修改书籍信息：</h3>
+                            </div>
+                            <div class="modal-body">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="book-addon1" >书名：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    <input type="text" class="input-sm" id="bookname" aria-describedby="book-addon3" >
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="book-addon2">作者：&nbsp;&nbsp;&nbsp;&nbsp; </span>
+                                    <input type="text" class="input-sm" id="author" aria-describedby="book-addon3" >
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="book-addon3">简介：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <!--<input type="text" class="input-sm" id="description" aria-describedby="book-addon3" placeholder="">-->
+                                        <textarea id="description"  style="width:300px;height:150px;" >
+										</textarea>
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="book-addon4">价格：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <input type="text" class="input-sm" id="price" aria-describedby="book-addon3" placeholder="">
+                                    </div>
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon5">数量：&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <input type="text" class="input-sm" id="amount" aria-describedby="book-addon3" placeholder="">
+                                    </div>
+                                    <div id="div2" class="modal-footer">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 修改用户窗口结束-->
+                <!-- 删除用户窗口-->
+                <div class="modal hide" id="deleteBook" tabindex="-1" role="dialog" aria-hidden="true" style="top:200px;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    ×
+                                </button>
+                                <h5 class="modal-title" id="myModalLabel">确定删除书籍信息？</h5>
+                            </div>
+
+                            <div  class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="deleteYesId1">确定</button>
+                                <button type="button" class="btn btn-default" id="deleteNoId1" data-dismiss="modal">取消</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 删除用户窗口结束-->
+            </div>
+        </div>
+    </div>
+
+
+	<!-- scripts -->
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
+    <!-- knob -->
+    <script src="js/jquery.knob.js"></script>
+    <!-- flot charts -->
+    <script src="js/jquery.flot.js"></script>
+    <script src="js/jquery.flot.stack.js"></script>
+    <script src="js/jquery.flot.resize.js"></script>
+    <script src="js/theme.js"></script>
+
+    <script type="text/javascript">
+        //关键字搜索
+        function search(e){
+            var evt = window.event || e;
+            console.log($('#keyword').val());
+            if(evt.keyCode==13){
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    contentType: 'application/json',
+                    url: "http://localhost:8080/laofuzi/book/findByCondition",
+                    data:JSON.stringify({
+                        "name":$('#keyword').val(),
+                    }),
+                    success: function (result) {
+                        console.log(result);
+                        $("#books").empty("");
+                        str= '';
+                        for (i = 0; i < result.length; i++) {
+                            str += '<tr class="row' + i + '"><td><img  id="bookimg' + i + '"  src="' + result[i].img+ '" width=100px; /> </td>';
+                            str += '<td><input type="text"  id="bookname' + i + '"value="' + result[i].name+ '" style="width:140px" readonly="true"/> </td>';
+                            str += '<td><input type="text"  id="author' + i + '" value="' + result[i].author+ '" style="width:140px" readonly="true"/> </td>';
+                            str += '<td><textarea id="description"  style="width:300px;height:150px;" readonly="true">'+result[i].describe+'</textarea></td> ';
+                            str += '<td><input type="text"  id="price' + i + '"value="' + result[i].unitprice + '" style="width:140px" readonly="true"/> </td>';
+                            str += '<td><input type="text"  id="quantity' + i + '"value="' + result[i].quantity + '" style="width:140px" readonly="true"/> </td>';
+                            str += '</tr>';
+
+                        }//循环结束
+                        $('#books').append($(str));
+                    }
+                });
+            }
+        }
+        $(function () {
+            $('#bookname1').attr('readonly', true);
+            //编辑事件
+            $('#edit1').on('click', function (c) {
+                $('#bookname1').attr('readonly', false);
+                $('#author1').attr('readonly', false);
+                $('#description1').attr('readonly', false);
+                $('#price1').attr('readonly', false);
+                $('#amount1').attr('readonly', false);
+            });
+            $('#edit2').on('click', function (c) {
+                $('#bookname2').attr('readonly', false);
+                $('#author2').attr('readonly', false);
+                $('#description2').attr('readonly', false);
+                $('#price2').attr('readonly', false);
+                $('#amount2').attr('readonly', false);
+            });
+            $('#edit3').on('click', function (c) {
+                $('#bookname3').attr('readonly', false);
+                $('#author3').attr('readonly', false);
+                $('#description3').attr('readonly', false);
+                $('#price3').attr('readonly', false);
+                $('#amount3').attr('readonly', false);
+            });
+            $('#edit4').on('click', function (c) {
+                $('#bookname4').attr('readonly', false);
+                $('#author4').attr('readonly', false);
+                $('#description4').attr('readonly', false);
+                $('#price4').attr('readonly', false);
+                $('#amount4').attr('readonly', false);
+            });
+            $('#edit5').on('click', function (c) {
+                $('#bookname5').attr('readonly', false);
+                $('#author5').attr('readonly', false);
+                $('#description5').attr('readonly', false);
+                $('#price5').attr('readonly', false);
+                $('#amount5').attr('readonly', false);
+            });
+            //删除事件
+            $('#delete1').on('click', function (c) {
+                $('.row1').fadeOut('slow', function (c) {
+                    $('.row1').remove();
+                });
+            });
+            $('#delete2').on('click', function (c) {
+                $('.row2').fadeOut('slow', function (c) {
+                    $('.row2').remove();
+                });
+            });
+            $('#delete3').on('click', function (c) {
+                $('.row3').fadeOut('slow', function (c) {
+                    $('.row3').remove();
+                });
+            });
+            $('#delete4').on('click', function (c) {
+                $('.row4').fadeOut('slow', function (c) {
+                    $('.row4').remove();
+                });
+            });
+            $('#delete5').on('click', function (c) {
+                $('.row5').fadeOut('slow', function (c) {
+                    $('.row5').remove();
+                });
+            });
+            // jQuery Knobs
+            $(".knob").knob();
+
+
+            // jQuery UI Sliders
+            $(".slider-sample1").slider({
+                value: 100,
+                min: 1,
+                max: 500
+            });
+            $(".slider-sample2").slider({
+                range: "min",
+                value: 130,
+                min: 1,
+                max: 500
+            });
+            $(".slider-sample3").slider({
+                range: true,
+                min: 0,
+                max: 500,
+                values: [40, 170],
+            });
+        })
+            //点击编辑按钮
+            function updatebook(bookid){
+                $('#addYesId1').remove();
+                $('#addNoId1').remove();
+                str='<button type="button" class="btn btn-primary" id="addYesId1" onclick="editok1('+bookid+')">确定</button>';
+                str+='<button type="button" class="btn btn-default" id="addNoId1" data-dismiss="modal">取消</button>';
+                $('#div2').append($(str));
+                str='';
+                $('#bookwindow').modal('show');
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    contentType: 'application/json',
+                    url: "http://localhost:8080/laofuzi/book/findById",
+                    data:JSON.stringify({
+                        "id":bookid
+                    }),
+                    success: function (result) {
+                        console.log(result);
+                        $('#bookname').val(result.name);
+                        $('#author').val(result.author);
+                        $('#description').val(result.describe);
+                        $('#price').val(result.unitprice);
+                        $('#amount').val(result.quantity);
+                    }
+                });
+            }
+            //点击确认删除
+            function deletebook(bookid)
+            {
+                var mymessage=confirm("确定删除书籍信息？");
+                if(mymessage==true)
+                {
+                    $.ajax({
+                        type: "post",
+                        dataType: "json",
+                        contentType: 'application/json',
+                        url: "http://localhost:8080/laofuzi/book/delete",
+                        data:JSON.stringify({
+                            "id":bookid
+                        }),
+                        success: function (result) {
+                            console.log(result);
+                            $('#deleteBook').modal('hide');
+                            location.reload(true);
+                        }
+                    });
+                }
+            }
+            //点击确认修改按钮
+            function  editok1(bookid) {
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    contentType: 'application/json',
+                    url: "http://localhost:8080/laofuzi/book/update",
+                    data:JSON.stringify({
+                        "id":bookid,
+                        "name":$('#bookname').val(),
+                        "author":$('#author').val(),
+                        "describe":$('#description').val(),
+                        "unitprice":$('#price').val(),
+                        "quantity":$('#amount').val(),
+                    }),
+                    success: function (data) {
+                        console.log(data);
+                        alert("修改成功！");
+                        $('#bookwindow').modal('hide');
+                        location.reload(true);
+                    }
+                })
+            }
+    </script>
+
+</body>
+</html>
